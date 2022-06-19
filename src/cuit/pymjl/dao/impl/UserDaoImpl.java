@@ -43,4 +43,20 @@ public class UserDaoImpl implements UserDao {
         }
         return true;
     }
+
+    @Override
+    public boolean selectUserByUsernameAndPassword(String username, String password) {
+        System.out.println("开始根据username=[" + username + "], password=[" + password + "]查询用户");
+        QueryRunner queryRunner = new QueryRunner(DruidUtils.getDataSource());
+        String sql = "select * from user where binary username=? and password=?";
+        try {
+            Map<String, Object> data = queryRunner.query(sql, new MapHandler(), username, password);
+            if (data == null || data.size() == 0) {
+                return false;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return true;
+    }
 }

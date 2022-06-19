@@ -22,4 +22,13 @@ public interface UserDao {
      * @return boolean
      */
     boolean isExist(String username);
+
+    /**
+     * 通过用户名和密码查询用户
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return boolean
+     */
+    boolean selectUserByUsernameAndPassword(String username, String password);
 }

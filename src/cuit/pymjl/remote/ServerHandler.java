@@ -28,8 +28,14 @@ public class ServerHandler {
         if (group.equals(Group.Main_MENU.getGroup())) {
             switch (option) {
                 case 1:
-                    System.out.println("客户端调用服务端登录的方法");
-                    //TODO
+                    boolean login = userService.login(request);
+                    if (login) {
+                        response.setSucceed(true);
+                        response.setMessage("登录成功");
+                        break;
+                    } else {
+                        response.setMessage("用户名或密码错误，登录失败");
+                    }
                     break;
                 case 2:
                     //判断用户名是否存在

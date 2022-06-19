@@ -24,4 +24,12 @@ public interface UserService {
      * @return boolean
      */
     boolean isExist(Request request);
+
+    /**
+     * 登录
+     *
+     * @param request 请求
+     * @return boolean
+     */
+    boolean login(Request request);
 }

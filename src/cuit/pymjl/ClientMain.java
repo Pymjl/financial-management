@@ -26,13 +26,21 @@ public class ClientMain {
             //这里需要注意，输入整型后再输入字符串，字符串会为空，所以这里需要特殊处理
             String option = scanner.nextLine();
             int opt = Integer.parseInt(option);
+            Response response = null;
             switch (opt) {
                 case 1:
                     System.out.println("登录");
+                    User userInfo = inputUserInfo(scanner);
+                    response = handler.invoke(1, Group.Main_MENU.getGroup(), userInfo);
+                    System.out.println(response.getMessage());
+                    if (response.getSucceed()) {
+                        //TODO 跳转至二级菜单
+                        System.out.println("跳转至二级菜单");
+                    }
                     break;
                 case 2:
                     User user = getUser(scanner);
-                    Response response = handler.invoke(2, Group.Main_MENU.getGroup(), user);
+                    response = handler.invoke(2, Group.Main_MENU.getGroup(), user);
                     System.out.println(response.getMessage());
                     Thread.sleep(1000);
                     break;
@@ -45,6 +53,23 @@ public class ClientMain {
         }
     }
 
+    private static User inputUserInfo(Scanner scanner) {
+        System.out.println("请输入你的用户名:");
+        String username = scanner.nextLine();
+        while (StringUtils.isBlank(username)) {
+            System.out.println("username不能为空请重新输入");
+            username = scanner.nextLine();
+        }
+
+        System.out.println("请输入你的密码:");
+        String password = scanner.nextLine();
+        while (StringUtils.isBlank(password) || password.length() < 6) {
+            System.out.println("密码至少是长度为6的字符串，请重新输入");
+            password = scanner.nextLine();
+        }
+        return new User(username, password);
+    }
+
     /**
      * 获取用户
      *
@@ -52,7 +77,7 @@ public class ClientMain {
      * @return {@code User}
      */
     private static User getUser(Scanner scanner) {
-        System.out.println("请输入你的名字:");
+        System.out.println("请输入你的用户名:");
         String username = scanner.nextLine();
         while (StringUtils.isBlank(username)) {
             System.out.println("username不能为空请重新输入");

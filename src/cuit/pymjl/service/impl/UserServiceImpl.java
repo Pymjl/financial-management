@@ -30,4 +30,10 @@ public class UserServiceImpl implements UserService {
         User user = (User) request.getData();
         return userDao.isExist(user.getUsername());
     }
+
+    @Override
+    public boolean login(Request request) {
+        User user = (User) request.getData();
+        return userDao.selectUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+    }
 }

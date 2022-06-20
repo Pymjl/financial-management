@@ -5,8 +5,10 @@ import cuit.pymjl.entity.User;
 import cuit.pymjl.utils.DruidUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapHandler;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,7 +48,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean selectUserByUsernameAndPassword(String username, String password) {
-        System.out.println("开始根据username=[" + username + "], password=[" + password + "]查询用户");
+        System.out.println("开始根据username=[" + username + "], password=[" + password + "]查询用户......");
         QueryRunner queryRunner = new QueryRunner(DruidUtils.getDataSource());
         String sql = "select * from user where binary username=? and password=?";
         try {

@@ -3,12 +3,10 @@ package cuit.pymjl;
 import cuit.pymjl.constant.Group;
 import cuit.pymjl.entity.Response;
 import cuit.pymjl.entity.User;
-import cuit.pymjl.remote.Client;
 import cuit.pymjl.remote.ClientHandler;
 import cuit.pymjl.utils.MenuUtils;
 import cuit.pymjl.utils.StringUtils;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -29,13 +27,12 @@ public class ClientMain {
             Response response = null;
             switch (opt) {
                 case 1:
-                    System.out.println("登录");
                     User userInfo = inputUserInfo(scanner);
                     response = handler.invoke(1, Group.Main_MENU.getGroup(), userInfo);
                     System.out.println(response.getMessage());
+                    Thread.sleep(1000);
                     if (response.getSucceed()) {
-                        //TODO 跳转至二级菜单
-                        System.out.println("跳转至二级菜单");
+                        jump(scanner);
                     }
                     break;
                 case 2:
@@ -49,6 +46,54 @@ public class ClientMain {
                     break;
                 default:
                     System.out.println("操作符异常，请重新输入");
+            }
+        }
+    }
+
+    /**
+     * 处理二级菜单的逻辑
+     */
+    private static void jump(Scanner scanner) {
+        while (true) {
+            MenuUtils.printSecondaryMenu();
+            String opt = scanner.nextLine();
+            int option = Integer.parseInt(opt);
+            //退出标记
+            int flag = 0;
+
+            switch (option) {
+                case 0:
+                    flag = 1;
+                    break;
+                case 1:
+                    System.out.println("1.查询账务");
+                    break;
+                case 2:
+                    System.out.println("2.多条件查询");
+                    break;
+                case 3:
+                    System.out.println("3.添加账务");
+                    break;
+                case 4:
+                    System.out.println("4.编辑账务");
+                    break;
+                case 5:
+                    System.out.println("5.删除账务");
+                    break;
+                case 6:
+                    System.out.println("6.搜索账务");
+                    break;
+                case 7:
+                    System.out.println("7.上传账务");
+                    break;
+                case 8:
+                    System.out.println("8.下载账务");
+                    break;
+                default:
+                    System.out.println("操作符异常，请重新输入");
+            }
+            if (flag == 1) {
+                break;
             }
         }
     }
@@ -102,5 +147,6 @@ public class ClientMain {
         }
         return new User(username, password);
     }
+
 
 }

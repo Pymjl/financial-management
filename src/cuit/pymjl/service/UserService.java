@@ -1,7 +1,10 @@
 package cuit.pymjl.service;
 
+import cuit.pymjl.entity.Bill;
 import cuit.pymjl.entity.Request;
 import cuit.pymjl.entity.User;
+
+import java.util.List;
 
 /**
  * @author Pymjl

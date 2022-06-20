@@ -2,10 +2,14 @@ package cuit.pymjl.service.impl;
 
 import cuit.pymjl.dao.UserDao;
 import cuit.pymjl.dao.impl.UserDaoImpl;
+import cuit.pymjl.entity.Bill;
 import cuit.pymjl.entity.Request;
 import cuit.pymjl.entity.User;
 import cuit.pymjl.factory.SingletonFactory;
 import cuit.pymjl.service.UserService;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Pymjl

@@ -1,4 +1,4 @@
-package cuit.pymjl.constant;
+package config;
 
 /**
  * @author Pymjl

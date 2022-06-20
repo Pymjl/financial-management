@@ -1,6 +1,6 @@
 package cuit.pymjl.remote;
 
-import cuit.pymjl.constant.Transport;
+import config.Transport;
 import cuit.pymjl.entity.Request;
 import cuit.pymjl.entity.Response;
 

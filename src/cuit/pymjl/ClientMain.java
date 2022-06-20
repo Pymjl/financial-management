@@ -3,6 +3,7 @@ package cuit.pymjl;
 import cuit.pymjl.constant.Group;
 import cuit.pymjl.entity.*;
 import cuit.pymjl.remote.ClientHandler;
+import cuit.pymjl.utils.IOUtils;
 import cuit.pymjl.utils.MenuUtils;
 import cuit.pymjl.utils.StringUtils;
 
@@ -84,14 +85,14 @@ public class ClientMain {
                 //返回当前登录用户的所有账务信息
                 case 1:
                     response = handler.invoke(1, Group.SECONDARY_MENU.getGroup(), username);
-                    MenuUtils.printRecords(response);
+                    MenuUtils.printRecords(response, username);
                     Thread.sleep(1000);
                     break;
                 //多条件查询
                 case 2:
                     Condition condition = getCondition(username, scanner);
                     response = handler.invoke(2, Group.SECONDARY_MENU.getGroup(), condition);
-                    MenuUtils.printRecords(response);
+                    MenuUtils.printRecords(response, username);
                     Thread.sleep(1000);
                     break;
                 //添加账务
@@ -105,7 +106,7 @@ public class ClientMain {
                 case 4:
                     //先查询该用户的所有账务
                     response = handler.invoke(1, Group.SECONDARY_MENU.getGroup(), username);
-                    MenuUtils.printRecords(response);
+                    MenuUtils.printRecords(response, username);
                     if (!response.getSucceed()) {
                         System.out.println("您还没有账务记录可以编辑");
                         break;
@@ -121,7 +122,7 @@ public class ClientMain {
                 case 5:
                     //先查询该用户的所有账务
                     response = handler.invoke(1, Group.SECONDARY_MENU.getGroup(), username);
-                    MenuUtils.printRecords(response);
+                    MenuUtils.printRecords(response, username);
                     if (!response.getSucceed()) {
                         System.out.println("您还没有账务记录可以删除");
                         break;
@@ -145,12 +146,19 @@ public class ClientMain {
                     } else {
                         Key keywords = new Key(username, key);
                         response = handler.invoke(6, Group.SECONDARY_MENU.getGroup(), keywords);
-                        MenuUtils.printRecords(response);
+                        MenuUtils.printRecords(response, username);
                         Thread.sleep(1000);
                     }
                     break;
                 case 7:
-                    System.out.println("7.上传账务");
+                    String path = getFilePath(scanner);
+                    if (path == null) {
+                        break;
+                    }
+                    //TODO
+//                    response = handler.upload(path, username);
+                    System.out.println(response.getMessage());
+                    Thread.sleep(1000);
                     break;
                 case 8:
                     System.out.println("8.下载账务");
@@ -163,6 +171,31 @@ public class ClientMain {
                 break;
             }
         }
+    }
+
+    private static String getFilePath(Scanner scanner) {
+        //先获取本地的所有文件
+        List<String> files = IOUtils.getAllFiles();
+        if (files.isEmpty()) {
+            System.out.println("本地还没有文件，请先导出再上传");
+            return null;
+        }
+        System.out.println("============================本地的文件有============================");
+        for (int i = 0; i < files.size(); i++) {
+            System.out.println(i + 1 + "." + files.get(i));
+        }
+        System.out.println("请输入你要上传哪一个文件：");
+        String opt = scanner.nextLine();
+        if (StringUtils.isDigit(opt)) {
+            System.out.println("操作符有误，请重新操作");
+            return null;
+        }
+        int option = Integer.parseInt(opt);
+        if (option < 1 || option > files.size()) {
+            System.out.println("操作符有误，请重新操作");
+            return null;
+        }
+        return files.get(option - 1);
     }
 
     private static Bill selector(Scanner scanner, List<Bill> cache) {

@@ -43,7 +43,7 @@ public class MenuUtils {
      *
      * @param response 响应
      */
-    public static void printRecords(Response response) {
+    public static void printRecords(Response response, String username) {
         if (response.getSucceed()) {
             System.out.println("========================欢迎来到记账系统=========================");
             System.out.println("id\t\t用途\t\t\t金额\t\t\t账户\t\t\t创建时间\t\t\t\t描述");
@@ -53,8 +53,10 @@ public class MenuUtils {
             Scanner scanner = new Scanner(System.in);
             String opt = scanner.nextLine();
             if ("yes".equals(opt)) {
-                IOUtils.export(data);
+                IOUtils.export(data, username);
+                System.out.println("导出成功");
             }
+            System.out.println("正在返回上一级菜单.....");
         } else {
             System.out.println(response.getMessage());
         }

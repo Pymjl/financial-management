@@ -18,4 +18,29 @@ public interface BillService {
      * @return {@code List<Bill>}
      */
     List<Bill> queryBillsByUsername(Request request);
+
+    /**
+     * 根据时间查询账单
+     *
+     * @param request 请求
+     * @return {@code List<Bill>}
+     */
+    List<Bill> queryBillsByTime(Request request);
+
+    /**
+     * 添加账务
+     *
+     * @param request 请求
+     * @return boolean
+     */
+    boolean saveBill(Request request);
+
+    /**
+     * 模糊查询
+     *
+     * @param request 请求
+     * @return {@code List<Bill>}
+     */
+    List<Bill> search(Request request);
+
 }

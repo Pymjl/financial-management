@@ -3,8 +3,10 @@ package cuit.pymjl.service.impl;
 import cuit.pymjl.dao.BillDao;
 import cuit.pymjl.dao.impl.BillDaoImpl;
 import cuit.pymjl.entity.Bill;
+import cuit.pymjl.entity.Condition;
 import cuit.pymjl.entity.Request;
 import cuit.pymjl.service.BillService;
+import cuit.pymjl.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +32,38 @@ public class BillServiceImpl implements BillService {
         return mapListToBillList(list);
     }
 
+    @Override
+    public List<Bill> queryBillsByTime(Request request) {
+        Condition condition = (Condition) request.getData();
+        if (condition.getEndTime() == null) {
+            List<Map<String, Object>> list = billDao.queryBillsByTime(condition.getStartTime(), condition.getUsername());
+            return mapListToBillList(list);
+        } else {
+            List<Map<String, Object>> list = billDao.queryBillsByTime(condition.getStartTime(),
+                    condition.getEndTime(), condition.getUsername());
+            return mapListToBillList(list);
+        }
+    }
+
+    @Override
+    public boolean saveBill(Request request) {
+        Bill bill = (Bill) request.getData();
+        return billDao.saveBill(bill);
+    }
+
+    @Override
+    public List<Bill> search(Request request) {
+        String purpose = (String) request.getData();
+        List<Map<String, Object>> list = billDao.search(purpose);
+        return mapListToBillList(list);
+    }
+
+    /**
+     * 结果集映射
+     *
+     * @param list 列表
+     * @return {@code List<Bill>}
+     */
     private List<Bill> mapListToBillList(List<Map<String, Object>> list) {
         if (list == null || list.size() == 0) {
             return null;

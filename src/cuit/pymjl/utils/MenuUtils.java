@@ -4,6 +4,7 @@ import cuit.pymjl.entity.Bill;
 import cuit.pymjl.entity.Response;
 
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author Pymjl
@@ -48,7 +49,12 @@ public class MenuUtils {
             System.out.println("id\t\t用途\t\t\t金额\t\t\t账户\t\t\t创建时间\t\t\t\t描述");
             List<Bill> data = (List<Bill>) response.getData();
             data.forEach(System.out::println);
-            System.out.println();
+            System.out.println("是否选择将其导出为文件保存到本地(yes or no)？");
+            Scanner scanner = new Scanner(System.in);
+            String opt = scanner.nextLine();
+            if ("yes".equals(opt)) {
+                IOUtils.export(data);
+            }
         } else {
             System.out.println(response.getMessage());
         }

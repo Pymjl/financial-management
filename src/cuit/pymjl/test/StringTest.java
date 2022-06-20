@@ -11,6 +11,7 @@ import java.util.Scanner;
  **/
 public class StringTest {
     public static void main(String[] args) {
+        System.out.println(System.getProperty("user.dir"));
         Scanner scanner = new Scanner(System.in);
         String s1 = scanner.next();
         String s2 = scanner.next();

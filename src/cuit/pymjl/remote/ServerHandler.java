@@ -80,6 +80,7 @@ public class ServerHandler {
                 case 4:
                     System.out.println("编辑");
                     break;
+                //删除
                 case 5:
                     boolean res = billService.delete(request);
                     if (res) {
@@ -87,11 +88,31 @@ public class ServerHandler {
                         response.setMessage("删除成功");
                     }
                     break;
+                //模糊查询
+                case 6:
+                    search(request, response);
+                    break;
                 default:
                     System.err.println("操作符异常");
             }
         }
         return response;
+    }
+
+    /**
+     * 搜索
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    private void search(Request request, Response response) {
+        List<Bill> res = billService.search(request);
+        if (res == null || res.size() == 0) {
+            response.setMessage("无相关记录");
+        } else {
+            response.setSucceed(true);
+            response.setData(res);
+        }
     }
 
     /**

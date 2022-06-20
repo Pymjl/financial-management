@@ -73,13 +73,13 @@ public class BillDaoImpl implements BillDao {
     }
 
     @Override
-    public List<Map<String, Object>> search(String purposes) {
+    public List<Map<String, Object>> search(String purposes, String username) {
         System.out.println("开始根据[" + purposes + "]模糊查询......");
         String pro = "%" + purposes + "%";
         QueryRunner queryRunner = new QueryRunner(DruidUtils.getDataSource());
-        String sql = "SELECT * FROM airui_zhangwu WHERE flname LIKE ?";
+        String sql = "SELECT * FROM airui_zhangwu WHERE flname LIKE ? and username=?";
         try {
-            return queryRunner.query(sql, new MapListHandler(), pro);
+            return queryRunner.query(sql, new MapListHandler(), pro, username);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

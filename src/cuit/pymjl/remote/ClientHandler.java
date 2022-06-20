@@ -37,4 +37,10 @@ public class ClientHandler {
         Client client = new Client();
         return (Response) client.sendRequest(request);
     }
+
+    public Response invoke(int option, Integer group, Key keywords) {
+        Request request = new Request(option, keywords, group);
+        Client client = new Client();
+        return (Response) client.sendRequest(request);
+    }
 }

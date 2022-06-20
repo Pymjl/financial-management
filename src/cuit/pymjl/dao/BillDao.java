@@ -53,7 +53,7 @@ public interface BillDao {
      * @param purposes 用途
      * @return {@code List<Map<String, Object>>}
      */
-    List<Map<String, Object>> search(String purposes);
+    List<Map<String, Object>> search(String purposes, String username);
 
     /**
      * 删除

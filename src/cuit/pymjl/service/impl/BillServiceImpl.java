@@ -4,6 +4,7 @@ import cuit.pymjl.dao.BillDao;
 import cuit.pymjl.dao.impl.BillDaoImpl;
 import cuit.pymjl.entity.Bill;
 import cuit.pymjl.entity.Condition;
+import cuit.pymjl.entity.Key;
 import cuit.pymjl.entity.Request;
 import cuit.pymjl.service.BillService;
 import cuit.pymjl.utils.StringUtils;
@@ -53,8 +54,8 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public List<Bill> search(Request request) {
-        String purpose = (String) request.getData();
-        List<Map<String, Object>> list = billDao.search(purpose);
+        Key key = (Key) request.getData();
+        List<Map<String, Object>> list = billDao.search(key.getKey(), key.getUsername());
         return mapListToBillList(list);
     }
 

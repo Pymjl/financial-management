@@ -1,10 +1,7 @@
 package cuit.pymjl;
 
 import cuit.pymjl.constant.Group;
-import cuit.pymjl.entity.Bill;
-import cuit.pymjl.entity.Condition;
-import cuit.pymjl.entity.Response;
-import cuit.pymjl.entity.User;
+import cuit.pymjl.entity.*;
 import cuit.pymjl.remote.ClientHandler;
 import cuit.pymjl.utils.MenuUtils;
 import cuit.pymjl.utils.StringUtils;
@@ -126,8 +123,18 @@ public class ClientMain {
                         System.out.println(response.getMessage());
                     }
                     break;
+                //6.搜索账务
                 case 6:
-                    System.out.println("6.搜索账务");
+                    System.out.println("请输入关键词：");
+                    String key = scanner.nextLine();
+                    if (StringUtils.isNull(key)) {
+                        System.out.println("关键词不能为null");
+                    } else {
+                        Key keywords = new Key(username, key);
+                        response = handler.invoke(6, Group.SECONDARY_MENU.getGroup(), keywords);
+                        MenuUtils.printRecords(response);
+                        Thread.sleep(1000);
+                    }
                     break;
                 case 7:
                     System.out.println("7.上传账务");

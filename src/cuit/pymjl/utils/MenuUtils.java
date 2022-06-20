@@ -88,4 +88,16 @@ public class MenuUtils {
             return null;
         }
     }
+
+    public static void printRecordsNotExport(Response response, String username) {
+        if (response.getSucceed()) {
+            System.out.println("========================欢迎来到记账系统=========================");
+            System.out.println("id\t\t用途\t\t\t金额\t\t\t账户\t\t\t创建时间\t\t\t\t描述");
+            List<Bill> data = (List<Bill>) response.getData();
+            data.forEach(System.out::println);
+        } else {
+            System.out.println(response.getMessage());
+        }
+
+    }
 }

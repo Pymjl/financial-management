@@ -106,7 +106,7 @@ public class ClientMain {
                 case 4:
                     //先查询该用户的所有账务
                     response = handler.invoke(1, Group.SECONDARY_MENU.getGroup(), username);
-                    MenuUtils.printRecords(response, username);
+                    MenuUtils.printRecordsNotExport(response, username);
                     if (!response.getSucceed()) {
                         System.out.println("您还没有账务记录可以编辑");
                         break;
@@ -122,7 +122,7 @@ public class ClientMain {
                 case 5:
                     //先查询该用户的所有账务
                     response = handler.invoke(1, Group.SECONDARY_MENU.getGroup(), username);
-                    MenuUtils.printRecords(response, username);
+                    MenuUtils.printRecordsNotExport(response, username);
                     if (!response.getSucceed()) {
                         System.out.println("您还没有账务记录可以删除");
                         break;

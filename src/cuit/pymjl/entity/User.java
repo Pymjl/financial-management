@@ -1,7 +1,5 @@
 package cuit.pymjl.entity;
 
-
-import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,7 +8,6 @@ import java.io.Serializable;
  * @date 2022/6/19 21:02
  **/
 public class User implements Serializable {
-    @Serial
     private static final long serialVersionUID = -4529782578272943673L;
     /**
      * id

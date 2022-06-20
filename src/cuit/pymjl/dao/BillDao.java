@@ -62,4 +62,12 @@ public interface BillDao {
      * @return boolean
      */
     boolean delete(Integer id);
+
+    /**
+     * 更新
+     *
+     * @param bill 账务
+     * @return boolean
+     */
+    boolean update(Bill bill);
 }

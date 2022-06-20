@@ -51,4 +51,12 @@ public interface BillService {
      */
     boolean delete(Request request);
 
+    /**
+     * 更新
+     *
+     * @param request 请求
+     * @return boolean
+     */
+    boolean update(Request request);
+
 }

@@ -78,7 +78,11 @@ public class ServerHandler {
                     break;
                 //编辑
                 case 4:
-                    System.out.println("编辑");
+                    boolean update = billService.update(request);
+                    if (update) {
+                        response.setMessage("更新成功");
+                        response.setSucceed(true);
+                    }
                     break;
                 //删除
                 case 5:

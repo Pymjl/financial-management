@@ -99,4 +99,19 @@ public class BillDaoImpl implements BillDao {
         }
         return false;
     }
+
+    @Override
+    public boolean update(Bill bill) {
+        System.out.println("开始更新ID为[" + bill.getId() + "]的记录......");
+        QueryRunner queryRunner = new QueryRunner(DruidUtils.getDataSource());
+        String sql = "UPDATE airui_zhangwu SET flname=?,money=?,zhanghu=?,description=? WHERE zwid=?";
+        Object[] params = {bill.getPurposes(), bill.getMoney(), bill.getAccount(), bill.getDescription(), bill.getId()};
+        try {
+            queryRunner.update(sql, params);
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
 }

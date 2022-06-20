@@ -101,8 +101,21 @@ public class ClientMain {
                     System.out.println(response.getMessage());
                     Thread.sleep(1000);
                     break;
+                //4.编辑账务
                 case 4:
-                    System.out.println("4.编辑账务");
+                    //先查询该用户的所有账务
+                    response = handler.invoke(1, Group.SECONDARY_MENU.getGroup(), username);
+                    MenuUtils.printRecords(response);
+                    if (!response.getSucceed()) {
+                        System.out.println("您还没有账务记录可以编辑");
+                        break;
+                    }
+                    //暂存查询的结果集
+                    List<Bill> cache = (List<Bill>) response.getData();
+                    Bill newRecord = selector(scanner, cache);
+                    response = handler.invoke(4, Group.SECONDARY_MENU.getGroup(), newRecord);
+                    System.out.println(response.getMessage());
+                    Thread.sleep(1000);
                     break;
                 //删除账务
                 case 5:
@@ -150,6 +163,79 @@ public class ClientMain {
                 break;
             }
         }
+    }
+
+    private static Bill selector(Scanner scanner, List<Bill> cache) {
+        while (true) {
+            System.out.println("请输入你要编辑的账务ID:");
+            String billId = scanner.nextLine();
+            if (!StringUtils.isDigit(billId)) {
+                System.out.println("输入的格式有误，请重新输入");
+                continue;
+            }
+            int id = Integer.parseInt(billId);
+            Bill bill = getBill(id, cache);
+            if (bill == null) {
+                System.out.println("你输入的id不存在，请重新输入");
+                continue;
+            }
+
+            System.out.println("请选择操作：1.更改该记录的某一个属性 2.更改整个记录");
+            String opt = scanner.nextLine();
+            if (!StringUtils.isDigit(opt)) {
+                System.out.println("输入的格式有误，请重新输入");
+                continue;
+            }
+            int option = Integer.parseInt(opt);
+
+            if (option == 1) {
+                System.out.println("请选择更改哪一个属性: 1.用途 2.金额 3.账户 4.描述");
+                String ch = scanner.nextLine();
+                if (!StringUtils.isDigit(ch)) {
+                    System.out.println("输入的格式有误，请重新输入");
+                    continue;
+                }
+                int choice = Integer.parseInt(ch);
+                if (choice < 1 || choice > 4) {
+                    System.out.println("输入的操作符有误，请重新操作");
+                    continue;
+                }
+
+                System.out.println("请输入更改后的值:");
+                String data = scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        bill.setPurposes(data);
+                        return bill;
+                    case 2:
+                        bill.setMoney(Double.parseDouble(data));
+                        return bill;
+                    case 3:
+                        bill.setAccount(data);
+                        return bill;
+                    case 4:
+                        bill.setDescription(data);
+                        return bill;
+                    default:
+                        System.out.println("操作符异常，请重新输入");
+                }
+            } else if (option == 2) {
+                Bill newBill = inputBillInfo(bill.getUsername(), scanner);
+                newBill.setId(bill.getId());
+                return newBill;
+            } else {
+                System.out.println("操作符异常，请重新输入");
+            }
+        }
+    }
+
+    private static Bill getBill(int id, List<Bill> cache) {
+        for (Bill bill : cache) {
+            if (bill.getId().equals(id)) {
+                return bill;
+            }
+        }
+        return null;
     }
 
     private static Bill inputBillInfo(String username, Scanner scanner) {

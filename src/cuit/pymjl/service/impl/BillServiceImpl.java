@@ -65,6 +65,12 @@ public class BillServiceImpl implements BillService {
         return billDao.delete(id);
     }
 
+    @Override
+    public boolean update(Request request) {
+        Bill bill = (Bill) request.getData();
+        return billDao.update(bill);
+    }
+
     /**
      * 结果集映射
      *

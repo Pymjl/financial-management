@@ -9,7 +9,12 @@ public enum Group {
     /**
      * 主菜单
      */
-    Main_MENU(1);
+    Main_MENU(1),
+    /**
+     * 二级菜单
+     */
+    SECONDARY_MENU(2);
+
     private Integer group;
 
     Group() {

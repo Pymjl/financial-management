@@ -1,5 +1,10 @@
 package cuit.pymjl.utils;
 
+import cuit.pymjl.entity.Bill;
+import cuit.pymjl.entity.Response;
+
+import java.util.List;
+
 /**
  * @author Pymjl
  * @version 1.0
@@ -30,5 +35,22 @@ public class MenuUtils {
         System.out.println("7.上传账务");
         System.out.println("8.下载账务");
         System.out.println("0.返回主菜单");
+    }
+
+    /**
+     * 打印记录
+     *
+     * @param response 响应
+     */
+    public static void printRecords(Response response) {
+        if (response.getSucceed()) {
+            System.out.println("========================欢迎来到记账系统=========================");
+            System.out.println("id\t\t用途\t\t\t金额\t\t\t账户\t\t\t创建时间\t\t\t\t描述");
+            List<Bill> data = (List<Bill>) response.getData();
+            data.forEach(System.out::println);
+            System.out.println();
+        } else {
+            System.out.println(response.getMessage());
+        }
     }
 }

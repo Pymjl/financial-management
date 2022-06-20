@@ -1,5 +1,8 @@
 package cuit.pymjl.entity;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -7,7 +10,9 @@ import java.util.Date;
  * @version 1.0
  * @date 2022/6/20 11:48
  **/
-public class Bill {
+public class Bill implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5807882578272943999L;
     /**
      * id
      */
@@ -108,14 +113,9 @@ public class Bill {
 
     @Override
     public String toString() {
-        return "Bill{" +
-                "id=" + id +
-                ", purposes='" + purposes + '\'' +
-                ", money=" + money +
-                ", account='" + account + '\'' +
-                ", createTime=" + createTime +
-                ", description='" + description + '\'' +
-                ", username='" + username + '\'' +
-                '}';
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String time = format.format(this.createTime);
+        return id + "\t\t" + purposes + "\t\t"
+                + money + "\t\t" + account + "\t\t\t" + time + "\t\t" + description;
     }
 }

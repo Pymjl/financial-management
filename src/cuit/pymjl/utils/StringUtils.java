@@ -1,5 +1,7 @@
 package cuit.pymjl.utils;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Pymjl
  * @version 1.0
@@ -57,5 +59,22 @@ public class StringUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 判断字符串是否是数字
+     *
+     * @param strings 字符串
+     * @return boolean
+     */
+    public static boolean isDigit(String... strings) {
+        for (String s : strings) {
+            Pattern pattern = Pattern.compile("[0-9]*");
+            boolean matches = pattern.matcher(s).matches();
+            if (!matches) {
+                return false;
+            }
+        }
+        return true;
     }
 }

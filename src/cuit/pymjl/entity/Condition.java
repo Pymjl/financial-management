@@ -1,5 +1,7 @@
 package cuit.pymjl.entity;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +9,9 @@ import java.util.Date;
  * @version 1.0
  * @date 2022/6/20 12:22
  **/
-public class Condition {
+public class Condition implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5801112578272943999L;
     /**
      * 开始时间
      */

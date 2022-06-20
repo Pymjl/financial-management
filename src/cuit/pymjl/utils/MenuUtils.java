@@ -3,6 +3,7 @@ package cuit.pymjl.utils;
 import cuit.pymjl.entity.Bill;
 import cuit.pymjl.entity.Response;
 
+import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
@@ -59,6 +60,32 @@ public class MenuUtils {
             System.out.println("正在返回上一级菜单.....");
         } else {
             System.out.println(response.getMessage());
+        }
+    }
+
+    public static String printFileRecords(Response response) {
+        if (response.getSucceed()) {
+            System.out.println("您保存在服务器上的文件有：");
+            List<String> data = (List<String>) response.getData();
+            for (int i = 0; i < data.size(); i++) {
+                System.out.println(i + 1 + "." + data.get(i).substring(data.get(i).lastIndexOf(File.separator) + 1));
+            }
+            System.out.println("请输入你要下载的文件序号：");
+            Scanner scanner = new Scanner(System.in);
+            String opt = scanner.nextLine();
+            if (!StringUtils.isDigit(opt)) {
+                System.out.println("操作符有误，请重新输入");
+                return null;
+            }
+            int option = Integer.parseInt(opt);
+            if (option < 1 || option > data.size()) {
+                System.out.println("操作符越界，请重新输入");
+                return null;
+            }
+            return data.get(option - 1);
+        } else {
+            System.out.println(response.getMessage());
+            return null;
         }
     }
 }

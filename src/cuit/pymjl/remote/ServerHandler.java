@@ -2,6 +2,7 @@ package cuit.pymjl.remote;
 
 import cuit.pymjl.constant.Group;
 import cuit.pymjl.entity.Bill;
+import cuit.pymjl.entity.MyFile;
 import cuit.pymjl.entity.Request;
 import cuit.pymjl.entity.Response;
 import cuit.pymjl.factory.SingletonFactory;
@@ -9,7 +10,9 @@ import cuit.pymjl.service.BillService;
 import cuit.pymjl.service.UserService;
 import cuit.pymjl.service.impl.BillServiceImpl;
 import cuit.pymjl.service.impl.UserServiceImpl;
+import cuit.pymjl.utils.IOUtils;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -96,11 +99,70 @@ public class ServerHandler {
                 case 6:
                     search(request, response);
                     break;
+                //上传文件
+                case 7:
+                    upload(request, response);
+                    break;
+                //下载文件
+                case 8:
+                    download(request, response);
+                    break;
+                //查询用户的文件
+                case 9:
+                    findAllFiles(request, response);
+                    break;
                 default:
                     System.err.println("操作符异常");
             }
         }
         return response;
+    }
+
+    /**
+     * 下载
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    private void download(Request request, Response response) {
+        String targetPath = (String) request.getData();
+        byte[] bytes = IOUtils.fileConvertToByteArray(targetPath);
+        MyFile myFile = new MyFile();
+        myFile.setBytes(bytes);
+        myFile.setFileName(targetPath.substring(targetPath.lastIndexOf(File.separator) + 1));
+        response.setData(myFile);
+        response.setSucceed(true);
+        response.setMessage("下载成功");
+    }
+
+    /**
+     * 查找所有文件
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    private void findAllFiles(Request request, Response response) {
+        String username = (String) request.getData();
+        List<String> list = IOUtils.listMyFiles(username);
+        if (list.isEmpty()) {
+            response.setMessage("你还没有上传文件哟");
+        } else {
+            response.setSucceed(true);
+            response.setData(list);
+        }
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param request  请求
+     * @param response 响应
+     */
+    private void upload(Request request, Response response) {
+        MyFile myFile = (MyFile) request.getData();
+        IOUtils.ByteArrayConvertToFile(myFile.getUsername(), myFile.getBytes(), myFile.getFileName());
+        response.setSucceed(true);
+        response.setMessage("上传成功");
     }
 
     /**

@@ -150,18 +150,27 @@ public class ClientMain {
                         Thread.sleep(1000);
                     }
                     break;
+                //上传文件
                 case 7:
                     String path = getFilePath(scanner);
                     if (path == null) {
                         break;
                     }
-                    //TODO
-//                    response = handler.upload(path, username);
+                    response = handler.upload(7, Group.SECONDARY_MENU.getGroup(), path, username);
                     System.out.println(response.getMessage());
                     Thread.sleep(1000);
                     break;
+                //8.下载账务
                 case 8:
-                    System.out.println("8.下载账务");
+                    //先查看当前登录用户的拥有的文件,9在服务端表示查询文件
+                    response = handler.invoke(9, Group.SECONDARY_MENU.getGroup(), username);
+                    String targetFilePath = MenuUtils.printFileRecords(response);
+                    response = handler.download(8, Group.SECONDARY_MENU.getGroup(), targetFilePath);
+                    //将文件保存到本地
+                    MyFile srcFile = (MyFile) response.getData();
+                    IOUtils.saveFile(srcFile.getBytes(), srcFile.getFileName());
+                    System.out.println(response.getMessage());
+                    Thread.sleep(1000);
                     break;
                 default:
                     System.out.println("操作符异常，请重新输入");
@@ -186,13 +195,13 @@ public class ClientMain {
         }
         System.out.println("请输入你要上传哪一个文件：");
         String opt = scanner.nextLine();
-        if (StringUtils.isDigit(opt)) {
+        if (!StringUtils.isDigit(opt)) {
             System.out.println("操作符有误，请重新操作");
             return null;
         }
         int option = Integer.parseInt(opt);
         if (option < 1 || option > files.size()) {
-            System.out.println("操作符有误，请重新操作");
+            System.out.println("操作符越界，请重新输入");
             return null;
         }
         return files.get(option - 1);

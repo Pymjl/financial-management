@@ -2,6 +2,7 @@ package cuit.pymjl.test;
 
 import cuit.pymjl.utils.StringUtils;
 
+import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -12,6 +13,9 @@ import java.util.Scanner;
 public class StringTest {
     public static void main(String[] args) {
         System.out.println(System.getProperty("user.dir"));
+        String path = "C:\\Users\\Admin\\JavaProjects\\financial-management\\test.txt";
+        String filename = path.substring(path.lastIndexOf(File.separator) + 1);
+        System.out.println(filename);
         Scanner scanner = new Scanner(System.in);
         String s1 = scanner.next();
         String s2 = scanner.next();

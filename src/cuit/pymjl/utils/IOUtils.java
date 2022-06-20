@@ -12,11 +12,10 @@ import java.util.*;
  * @date 2022/6/20 17:35
  **/
 public class IOUtils {
-    private static final String ROOT_PATH = System.getProperty("user.dir") + File.separator + "client";
+    private static final String CLIENT_ROOT_PATH = System.getProperty("user.dir") + File.separator + "client";
+    private static final String SERVER_ROOT_PATH = System.getProperty("user.dir") + File.separator + "server";
+    private static final String DOWNLOAD_ROOT_PATH = System.getProperty("user.dir") + File.separator + "download";
 
-    static {
-        makeDir();
-    }
 
     /**
      * 将记录导出到本地文件
@@ -24,12 +23,13 @@ public class IOUtils {
      * @param list 列表
      */
     public static void export(List<Bill> list, String username) {
+        makeDir(CLIENT_ROOT_PATH);
         //指定文件路径
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         String filename = format.format(date) + "-" + username + "-" +
                 UUID.randomUUID().toString().replaceAll("-", "") + ".txt";
-        File file = new File(ROOT_PATH + File.separator + filename);
+        File file = new File(CLIENT_ROOT_PATH + File.separator + filename);
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -65,24 +65,85 @@ public class IOUtils {
     /**
      * 创建文件夹
      */
-    public static void makeDir() {
-        File file = new File(ROOT_PATH);
+    public static void makeDir(String path) {
+        File file = new File(path);
         if (!file.exists()) {
+            System.out.println("该文件夹不存在，准备创建[" + path + "]");
             file.mkdirs();
         }
     }
 
     public static List<String> getAllFiles() {
-        return getAllFile(ROOT_PATH, false);
+        return getAllFile(CLIENT_ROOT_PATH, false);
     }
 
     /**
-     * 获取路径下的所有文件/文件夹
+     * 列出我的文件列表
      *
-     * @param directoryPath  需要遍历的文件夹路径
-     * @param isAddDirectory 是否将子文件夹的路径也添加到list集合中
-     * @return
+     * @param username 用户名
+     * @return {@code List<String>}
      */
+    public static List<String> listMyFiles(String username) {
+        return getAllFile(SERVER_ROOT_PATH + File.separator + username, false);
+    }
+
+    /**
+     * 文件转换为字节数组
+     *
+     * @param path 路径
+     * @return {@code byte[]}
+     */
+    public static byte[] fileConvertToByteArray(String path) {
+        File file = new File(path);
+        return fileConvertToByteArray(file);
+    }
+
+    /**
+     * 字节数组转换为文件
+     *
+     * @param username 用户名
+     * @param data     数据
+     * @param fileName 文件名称
+     */
+    public static void ByteArrayConvertToFile(String username, byte[] data, String fileName) {
+        makeDir(SERVER_ROOT_PATH + File.separator + username);
+        //拼接字符串
+        String filePath = SERVER_ROOT_PATH + File.separator + username + File.separator + fileName;
+        ByteArrayConvertToFile(filePath, data);
+
+    }
+
+    public static void saveFile(byte[] bytes, String fileName) {
+        makeDir(DOWNLOAD_ROOT_PATH);
+        String filePath = DOWNLOAD_ROOT_PATH + File.separator + fileName;
+        ByteArrayConvertToFile(filePath, bytes);
+    }
+
+    private static void ByteArrayConvertToFile(String filepath, byte[] data) {
+        if (data != null) {
+            File file = new File(filepath);
+            if (file.exists()) {
+                file.delete();
+            }
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(file);
+                fos.write(data, 0, data.length);
+                fos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     private static List<String> getAllFile(String directoryPath, boolean isAddDirectory) {
         List<String> list = new ArrayList<String>();
         File baseFile = new File(directoryPath);
@@ -103,4 +164,38 @@ public class IOUtils {
         return list;
     }
 
+    private static byte[] fileConvertToByteArray(File file) {
+        byte[] data = null;
+        FileInputStream fis = null;
+        ByteArrayOutputStream baos = null;
+        try {
+            fis = new FileInputStream(file);
+            baos = new ByteArrayOutputStream();
+
+            int len;
+            byte[] buffer = new byte[1024];
+            while ((len = fis.read(buffer)) != -1) {
+                baos.write(buffer, 0, len);
+            }
+            data = baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (baos != null) {
+                try {
+                    baos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return data;
+    }
 }

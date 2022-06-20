@@ -69,6 +69,9 @@ public class StringUtils {
      */
     public static boolean isDigit(String... strings) {
         for (String s : strings) {
+            if (isBlank(s)) {
+                return false;
+            }
             Pattern pattern = Pattern.compile("[0-9]*");
             boolean matches = pattern.matcher(s).matches();
             if (!matches) {

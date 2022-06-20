@@ -68,6 +68,25 @@ public class ServerHandler {
                 case 2:
                     getAllBillsByTime(request, response);
                     break;
+                //添加账务
+                case 3:
+                    boolean succeed = billService.saveBill(request);
+                    if (succeed) {
+                        response.setSucceed(true);
+                        response.setMessage("添加成功");
+                    }
+                    break;
+                //编辑
+                case 4:
+                    System.out.println("编辑");
+                    break;
+                case 5:
+                    boolean res = billService.delete(request);
+                    if (res) {
+                        response.setSucceed(true);
+                        response.setMessage("删除成功");
+                    }
+                    break;
                 default:
                     System.err.println("操作符异常");
             }

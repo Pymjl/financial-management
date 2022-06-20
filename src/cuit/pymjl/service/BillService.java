@@ -43,4 +43,12 @@ public interface BillService {
      */
     List<Bill> search(Request request);
 
+    /**
+     * 删除
+     *
+     * @param request 请求
+     * @return boolean
+     */
+    boolean delete(Request request);
+
 }

@@ -12,6 +12,7 @@ import cuit.pymjl.utils.StringUtils;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -96,14 +97,34 @@ public class ClientMain {
                     MenuUtils.printRecords(response);
                     Thread.sleep(1000);
                     break;
+                //添加账务
                 case 3:
-                    System.out.println("3.添加账务");
+                    Bill bill = inputBillInfo(username, scanner);
+                    response = handler.invoke(3, Group.SECONDARY_MENU.getGroup(), bill);
+                    System.out.println(response.getMessage());
+                    Thread.sleep(1000);
                     break;
                 case 4:
                     System.out.println("4.编辑账务");
                     break;
+                //删除账务
                 case 5:
-                    System.out.println("5.删除账务");
+                    //先查询该用户的所有账务
+                    response = handler.invoke(1, Group.SECONDARY_MENU.getGroup(), username);
+                    MenuUtils.printRecords(response);
+                    if (!response.getSucceed()) {
+                        System.out.println("您还没有账务记录可以删除");
+                        break;
+                    }
+                    System.out.println("请输入ID删除对应的账单:");
+                    String billId = scanner.nextLine();
+                    if (!StringUtils.isDigit(billId)) {
+                        System.out.println("输入的数据有误，请重新操作");
+                    } else {
+                        int id = Integer.parseInt(billId);
+                        response = handler.invoke(5, Group.SECONDARY_MENU.getGroup(), id);
+                        System.out.println(response.getMessage());
+                    }
                     break;
                 case 6:
                     System.out.println("6.搜索账务");
@@ -122,6 +143,34 @@ public class ClientMain {
                 break;
             }
         }
+    }
+
+    private static Bill inputBillInfo(String username, Scanner scanner) {
+        Bill bill = new Bill();
+        while (true) {
+            System.out.println("请输入该账单的用途：");
+            String pro = scanner.nextLine();
+            System.out.println("请输入该账单的金额：");
+            String money = scanner.nextLine();
+            System.out.println("请输入该账单的账户所属银行：");
+            String account = scanner.nextLine();
+            System.out.println("请输入该账单的描述：");
+            String description = scanner.nextLine();
+            boolean isLegal = StringUtils.isBlank(pro, money, account, description);
+            if (isLegal) {
+                System.out.println("参数异常，所有参数不能为空，请重新输入");
+            } else {
+                bill.setAccount(account);
+                bill.setUsername(username);
+                bill.setCreateTime(new Date());
+                bill.setDescription(description);
+                Double mon = Double.parseDouble(money);
+                bill.setMoney(mon);
+                bill.setPurposes(pro);
+                break;
+            }
+        }
+        return bill;
     }
 
     /**

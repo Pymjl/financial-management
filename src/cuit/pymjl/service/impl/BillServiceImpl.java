@@ -58,6 +58,12 @@ public class BillServiceImpl implements BillService {
         return mapListToBillList(list);
     }
 
+    @Override
+    public boolean delete(Request request) {
+        int id = (int) request.getData();
+        return billDao.delete(id);
+    }
+
     /**
      * 结果集映射
      *

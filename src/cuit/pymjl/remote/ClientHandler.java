@@ -1,9 +1,6 @@
 package cuit.pymjl.remote;
 
-import cuit.pymjl.entity.Condition;
-import cuit.pymjl.entity.Request;
-import cuit.pymjl.entity.Response;
-import cuit.pymjl.entity.User;
+import cuit.pymjl.entity.*;
 
 /**
  * @author Pymjl
@@ -25,6 +22,18 @@ public class ClientHandler {
 
     public Response invoke(int option, Integer group, Condition condition) {
         Request request = new Request(option, condition, group);
+        Client client = new Client();
+        return (Response) client.sendRequest(request);
+    }
+
+    public Response invoke(int option, Integer group, Bill bill) {
+        Request request = new Request(option, bill, group);
+        Client client = new Client();
+        return (Response) client.sendRequest(request);
+    }
+
+    public Response invoke(int option, Integer group, int id) {
+        Request request = new Request(option, id, group);
         Client client = new Client();
         return (Response) client.sendRequest(request);
     }

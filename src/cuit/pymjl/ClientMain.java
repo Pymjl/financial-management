@@ -127,12 +127,19 @@ public class ClientMain {
                         System.out.println("您还没有账务记录可以删除");
                         break;
                     }
+                    //对查询的结果做一个缓存
+                    List<Bill> billCache = (List<Bill>) response.getData();
                     System.out.println("请输入ID删除对应的账单:");
                     String billId = scanner.nextLine();
                     if (!StringUtils.isDigit(billId)) {
                         System.out.println("输入的数据有误，请重新操作");
                     } else {
                         int id = Integer.parseInt(billId);
+                        boolean res = isLegal(billCache, id);
+                        if (!res) {
+                            System.out.println("您要删除的数据不存在，请重新输入");
+                            break;
+                        }
                         response = handler.invoke(5, Group.SECONDARY_MENU.getGroup(), id);
                         System.out.println(response.getMessage());
                     }
@@ -180,6 +187,15 @@ public class ClientMain {
                 break;
             }
         }
+    }
+
+    private static boolean isLegal(List<Bill> billCache, int id) {
+        for (Bill bill : billCache) {
+            if (id == bill.getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static String getFilePath(Scanner scanner) {
